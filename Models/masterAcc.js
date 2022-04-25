@@ -11,4 +11,4 @@ let masterAc = new Schema(
     }
 )
 
-module.exports=mongoose.model('branches')
+module.exports=mongoose.model('masterAccounts',masterAc)
