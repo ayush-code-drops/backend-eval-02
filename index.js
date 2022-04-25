@@ -18,8 +18,10 @@ app.listen(port, () => {
 
 app.post('/savingAcc', async (req, res, next) => {
     try {
+        let masterId = req.body.masterId;
         let accDetials = req.body;
         let response = await savingAccModel.insertOne(accDetials);
+        masterAccModel.updateOne({"_id":masterId},{$set:{balance:balance+req.body.balance}})
         res.json(req.body);   
     }
     catch (error) {
@@ -31,14 +33,22 @@ app.post('/savingAcc', async (req, res, next) => {
 //to create Fixed Account
 app.post('/fixedAcc', async (req, res, next) => {
     try {
+        let masterId = req.body.masterId;
         let accDetials = req.body;
         let response = await fixedAccModel.insertOne(accDetials);
+        masterAccModel.updateOne({"_id":masterId},{$set:{balance:balance+req.body.balance}})
         res.json(req.body);   
     }
     catch (error) {
         res.status(500).send(error)
     }
    
+})
+
+app.get('/:masterId', async (req, res, next) => {
+    let masterId = req.params.masterId;
+    let response = await masterAccModel.find({ "userId": masterId })
+    res.json(response)
 })
 
 
